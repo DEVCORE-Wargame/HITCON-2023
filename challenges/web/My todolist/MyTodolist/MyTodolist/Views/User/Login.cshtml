@@ -1,0 +1,34 @@
+﻿<div class="ts-center">
+    <div class="ts-header is-large is-heavy is-icon">
+        <div class="ts-icon is-face-smile-icon"></div>
+        My TodoList
+    </div>
+    @{
+        var message = TempData["Message"];
+    }
+    @if (message != null)
+    {
+        <br />
+        <div class="ts-snackbar">
+            <div class="content">@message</div>
+        </div>
+    }
+    <form method="POST">
+        <div class="ts-segment u-top-spaced-large" style="width: 260px">
+            <div class="ts-wrap is-vertical">
+                <div class="ts-text is-label">Username</div>
+                <div class="ts-input is-start-icon is-underlined">
+                    <span class="ts-icon is-user-icon"></span>
+                    <input type="text" name="username" />
+                </div>
+                <div class="ts-text is-label">Password</div>
+                <div class="ts-input is-start-icon is-underlined">
+                    <span class="ts-icon is-lock-icon"></span>
+                    <input type="password" name="password" />
+                </div>
+                <button class="ts-button is-fluid" type="submit" formaction="/User/DoLogin">Login</button>
+                <button class="ts-button is-fluid" type="submit" formaction="/User/DoRegister">Register</button>
+            </div>
+        </div>
+    </form>
+</div>
