@@ -1,0 +1,167 @@
+﻿<div class="ts-container is-narrow u-top-spaced-huge">
+    <div class="ts-grid is-relaxed u-top-spaced">
+        <div class="column is-16-wide">
+            <div class="ts-box">
+                <div id="todoList" class="ts-menu">
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="ts-grid">
+        <div class="column is-16-wide ts-wrap" style="justify-content: center">
+            <button class="ts-button is-positive is-outlined" data-toggle="addModal:is-visible">
+                <span class="ts-icon is-square-plus-icon"></span>
+                新增
+            </button>
+            <button class="ts-button is-primary is-outlined" onclick="showUpdateModal()">
+                <span class="ts-icon is-square-plus-icon"></span>
+                修改
+            </button>
+            <button class="ts-button is-negative is-outlined" onclick="todoDelete()">
+                <span class="ts-icon is-trash-icon"></span>
+                刪除
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="updateModal" class="ts-modal" data-name="updateModal">
+    <div class="content">
+        <div class="ts-content">
+            <div class="ts-header">Edit content</div>
+        </div>
+        <div class="ts-divider"></div>
+        <div class="ts-content">
+            <div class="ts-input">
+                <input id="todoContent" type="text" value="" />
+                <input id="todoUuid" type="hidden" value="" />
+            </div>
+        </div>
+        <div class="ts-divider"></div>
+        <div class="ts-content is-tertiary">
+            <div class="ts-wrap is-end-aligned">
+                <button class="ts-button" onclick="todoUpdate()">確定</button>
+                <button class="ts-button is-outlined" data-toggle="updateModal:is-visible">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="addModal" class="ts-modal" data-name="addModal">
+    <div class="content">
+        <div class="ts-content">
+            <div class="ts-header">New content</div>
+        </div>
+        <div class="ts-divider"></div>
+        <div class="ts-content">
+            <div class="ts-input">
+                <input id="todoAddContent" type="text" value="Buy a milk." />
+            </div>
+        </div>
+        <div class="ts-divider"></div>
+        <div class="ts-content is-tertiary">
+            <div class="ts-wrap is-end-aligned">
+                <button class="ts-button" onclick="todoAdd()">確定</button>
+                <button class="ts-button is-outlined" data-toggle="addModal:is-visible">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showUpdateModal() {
+        var todo = document.querySelector('#todoList > a.is-active');
+        var content = todo.innerText;
+        document.querySelector('#updateModal #todoContent').value = content;
+        document.querySelector('#updateModal #todoUuid').value = todo.dataset.uuid;
+        document.getElementById('updateModal').classList.toggle('is-visible');
+
+    }
+
+    function todoOnClick(todo) {
+        [].forEach.call(document.getElementById('todoList').children, (child) => {
+            child.classList.remove('is-active');
+        });
+        todo.classList.toggle('is-active');
+    }
+
+    function todoAdd() {
+        var content = document.getElementById('todoAddContent').value;
+        fetch('/Api/AddTodo', {
+            method: 'POST',
+            mode: 'same-origin',
+            credentials: 'same-origin',
+            body: new URLSearchParams({
+                content: content
+            })
+        }).then(res => res.json()).then(data => {
+            if (!data.error) {
+                refreshTodo();
+            }
+        }).finally(() => {
+            document.getElementById('addModal').classList.toggle('is-visible');
+        });
+    }
+
+    function todoUpdate() {
+        var content = document.getElementById('todoContent').value;
+        var uuid = document.getElementById('todoUuid').value;
+        fetch('/Api/UpdateTodo', {
+            method: 'POST',
+            mode: 'same-origin',
+            credentials: 'same-origin',
+            body: new URLSearchParams({
+                uuid: uuid,
+                field: 'content',
+                value: content
+            })
+        }).then(res => res.json()).then(data => {
+            if (!data.error) {
+                refreshTodo();
+            }
+        }).finally(() => {
+            document.getElementById('updateModal').classList.toggle('is-visible');
+        });
+    }
+
+    function todoDelete(todo) {
+        var todo = document.querySelector('#todoList > a.is-active');
+        var uuid = todo.dataset.uuid;
+        fetch('/Api/DeleteTodo', {
+            method: 'POST',
+            mode: 'same-origin',
+            credentials: 'same-origin',
+            body: new URLSearchParams({
+                uuid: uuid
+            })
+        }).then(res => res.json()).then(data => {
+            if (!data.error) {
+                refreshTodo();
+            }
+        });
+    }
+    function refreshTodo() {
+        document.getElementById('todoList').innerHTML = '';
+        fetch('/Api/MyProfile', {
+            method: 'POST',
+            mode: 'same-origin',
+            credentials: 'same-origin'
+        }).then(res => res.json()).then(data => {
+            var list = document.getElementById('todoList');
+            Object.keys(data.Todos).forEach(uuid => {
+                var todo = data.Todos[uuid];
+                var a = document.createElement('a');
+                a.classList.add('item');
+                a.dataset.uuid = uuid;
+                a.setAttribute('onclick', 'todoOnClick(this)');
+                a.innerText = todo.content;
+                var divider = document.createElement('div');
+                divider.classList.add('ts-divider');
+                list.appendChild(a);
+                list.appendChild(divider);
+            })
+        });
+    }
+    refreshTodo();
+</script>

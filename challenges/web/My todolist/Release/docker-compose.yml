@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports: 
+      - "8003:80"
+    volumes:
+      - "./flag:C:/flag:ro"
+    restart: always
+    depends_on:
+      - mongo
+    networks:
+      - mytodolist
+  mongo:
+    image: mongo
+    restart: always
+    networks:
+      - mytodolist
+
+networks:
+  mytodolist: {}
