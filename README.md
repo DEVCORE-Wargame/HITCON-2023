@@ -14,7 +14,7 @@ This repository is created to archive the official page of HITCON 2023 x DEVCORE
 
 ## Scoreboard
 
-
+[scoreboard.md](https://github.com/DEVCORE-Wargame/HITCON-2023/tree/main/scoreboard.md)
 
 ## Page Backup
 
