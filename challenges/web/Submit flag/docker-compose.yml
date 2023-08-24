@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:latest
+    restart: always
+    ports: 
+      - "127.0.0.1:8902:80"
+    volumes:
+      - "./nginx/nginx.conf:/etc/nginx/conf.d/default.conf"
+      - "./www:/var/www/html:ro"
+    depends_on:
+      - mysql
+      - fpm
+    networks:
+      - submitflag
+
+  fpm:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - mysql
+    networks:
+      - submitflag
+
+  mysql:
+    image: mariadb:10.9.1-rc-jammy
+    volumes:
+      - "./sql:/docker-entrypoint-initdb.d:ro"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: q4EBcr4i8jES2Lp9N5yp
+      MYSQL_DATABASE: flag
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: d5oaVMxKeUEAu5hd78jR
+    networks:
+      - submitflag
+
+networks:
+  submitflag: {}

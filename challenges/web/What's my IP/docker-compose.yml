@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports: 
+      - "127.0.0.1:8901:80"
+    restart: always
+    depends_on:
+      - mysql
+    networks:
+      - whatsmyip
+  mysql:
+    image: mariadb:10.9.1-rc-jammy
+    volumes:
+      - "./sql:/docker-entrypoint-initdb.d:ro"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: z2JdwxTM8VE3uo5sKB9
+      MYSQL_DATABASE: ipdb
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: en8yzvQz4ywKK6gnSbK
+    networks:
+      - whatsmyip
+
+networks:
+  whatsmyip: {}

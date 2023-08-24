@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="5">
+    <title>Random Kitten</title>
+    <!-- Reference: https://codepen.io/TheBrutalTooth/pen/VwGVbPM -->
+    <style>
+        :root {
+            --tvw: 130;
+            --tvh: 90;
+            --canv-h: 60;
+            --canv-w: 80;
+        }
+
+        html {
+            background: black;
+        }
+
+        #container {
+            position: fixed;
+            height: calc(var(--tvh) * 1vmin);
+            width: calc(var(--tvw) * 1vmin);
+            overflow: hidden;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: transparent;
+            z-index: 0;
+        }
+
+        #mycanvas {
+            background: transparent;
+            position: fixed;
+            height: calc(var(--canv-h) * 1vmin);
+            width: calc(var(--canv-w) * 1vmin);
+            overflow: hidden;
+            top: 50%;
+            left: 50%;
+            transform: translate(-62%, -54%);
+            background: transparent;
+            z-index: -1;
+        }
+
+        canvas {
+            position: fixed;
+            height: calc(var(--canv-h) * 1vmin);
+            width: calc(var(--canv-w) * 1vmin);
+            top: 50%;
+            left: 50%;
+            transform: translate(-61.25%, -54%);
+            z-index: -1;
+        }
+
+        .tv {
+            height: calc(var(--tvh) * 1vmin);
+            width: calc(var(--tvw) * 1vmin);
+            background-size: cover;
+            z-index: 21;
+            background-image: url('https://assets.codepen.io/439415/tv.png'), url('https://assets.codepen.io/439415/screen1_2.png');
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+</head>
+
+<body>
+    <div id="container">
+        <div class="tv">
+            <div id="mycanvas">
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    let mycounter = 0;
+    let nX = 0;
+    let img;
+    function preload() {
+        img = loadImage('/api/img');
+    }
+
+    function setup() {
+        mywidth = document.getElementById('mycanvas').offsetWidth;
+        myheight = document.getElementById('mycanvas').offsetHeight;
+        createCanvas(mywidth, myheight);
+    }
+
+    function draw() {
+        mycounter++;
+        if (mycounter < 30) { mypixelSubroutine(); }
+        if (mycounter == 37) { background(235); }
+        if (mycounter == 39) { background(55); }
+        if (mycounter == 48) { background(0); }
+        if (mycounter == 52) { myTestcard(); }
+    }
+
+    function myTestcard() {
+        img.loadPixels();
+        image(img, 0, 0, mywidth, myheight);
+        img.updatePixels();
+    }
+
+    function mypixelSubroutine() {
+        var mySize = (mywidth * myheight * 8);
+        loadPixels();
+        for (var i = 0; i < mySize * 8; i += 4) {
+            nX = (round(random(0, 255)));
+            pixels[i] = (nX);
+            pixels[i + 1] = (nX);
+            pixels[i + 2] = (nX);
+            pixels[i + 3] = (nX + 100);
+        }
+        updatePixels();
+    }
+
+    function windowResized() {
+        mywidth = document.getElementById('mycanvas').offsetWidth;
+        myheight = document.getElementById('mycanvas').offsetHeight;
+
+        resizeCanvas(mywidth, myheight);
+        img.loadPixels();
+        image(img, 0, 0, mywidth, myheight);
+        img.updatePixels();
+    }
+</script>
+
+</html>
