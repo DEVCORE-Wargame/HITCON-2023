@@ -5,12 +5,12 @@ This repository is created to archive the official page of HITCON 2023 x DEVCORE
 ## Challenges
 
 * web
-    * What's my IP
-    * Submit flag
-    * Random Kitten
-    * My todolist
+    * [What's my IP](https://github.com/DEVCORE-Wargame/HITCON-2023/tree/main/challenges/web/What's%20my%20IP)
+    * [Submit flag](https://github.com/DEVCORE-Wargame/HITCON-2023/tree/main/challenges/web/Submit%20flag)
+    * [Random Kitten](https://github.com/DEVCORE-Wargame/HITCON-2023/tree/main/challenges/web/Random%20Kitten)
+    * [My todolist](https://github.com/DEVCORE-Wargame/HITCON-2023/tree/main/challenges/web/My%20todolist)
 * rev
-    * Redpill
+    * [Redpill](https://github.com/DEVCORE-Wargame/HITCON-2023/tree/main/challenges/rev/Redpill)
 
 ## Scoreboard
 
